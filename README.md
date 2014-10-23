@@ -1,4 +1,4 @@
-classification from Classification And Regression Tree (CART)
+Classification from Classification and Regression Tree (CART)
 ===============================
 Classification by decision tree (CART) for use in processing framework QGIS
 
