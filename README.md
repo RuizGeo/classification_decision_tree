@@ -3,6 +3,7 @@ classification_decision_tree.py
 Classification by decision tree (CART) for use in processing framework QGIS
 
 Input parameters
+
   vector samples: Vector to training model tree, the fields of the table shall be equal to Vector datas. Only with the class column more.
   
   Classes field: Field with values classes. Type data equal the integer.
