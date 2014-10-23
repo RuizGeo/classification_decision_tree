@@ -3,8 +3,6 @@
 ##Classes_field=field Vector_samples
 ##Vector_datas=vector
 ##Maximum_depth=number 0
-##Minimum_number_of_samples_internal_node=number 1
-##Minimum_number_of_samples_leaf_node=number 2
 ##Output_classification=output vector
 #Import time
 import time
@@ -85,16 +83,12 @@ class ClassificationDecisionTree:
             atr = dict(zip(fields_names, feat.attributes()))
             self.datas.append(atr)
   
-    def classifierTree(self,Max_depth, Min_samples_split, Min_samples_leaf):
+    def classifierTree(self,Max_depth):
         '''
         Create model tree 
         Input training (list(dicy)), class (list) and datas (list(dict))
         Output list with classification of Datas
         '''
-        #Assess parameters tree
-        print Max_depth
-        print Min_samples_split
-        print Min_samples_leaf 
     
         #Create fit transform
         trans_train = vec.fit_transform(self.training).toarray()
@@ -102,13 +96,22 @@ class ClassificationDecisionTree:
         trans_datas = vec.fit_transform(self.datas).toarray()
         
         #Choose type classification
-        clf = tree.DecisionTreeClassifier( max_depth = Max_depth, min_samples_split = Min_samples_split, min_samples_leaf = Min_samples_leaf )
+        clf = tree.DecisionTreeClassifier( max_depth = Max_depth)
         #Crate model classification tree
         modelTree = clf.fit(trans_train, self.classes)
+        print 'max_n_classes, ', modelTree.tree_.max_n_classes
+        print 'node_count: ', modelTree.tree_.node_count
+        print 'min_density: ', modelTree.tree_.min_density
+        print 'n_outputs: ', modelTree.tree_.n_outputs
+        print 'n_features: ', modelTree.tree_.n_features
+        print 'n__classes: ', modelTree.tree_.n_classes
+        print 'n_samples: ', modelTree.tree_.n_samples
+    
         del(trans_train)
         del(self.classes)
         #Apply model classification in Datas
         self.classificationDatas = modelTree.predict(trans_datas)
+        
         with open("/home/ruiz/tree.dot", 'w') as f:
             f = tree.export_graphviz(modelTree, out_file=f)
     def writeClassification(self):
@@ -138,18 +141,6 @@ try:
                Maximum_depth = None
             else:
                 Maximum_depth  =int(Maximum_depth)
-                print 'Maximum_depth : ',Maximum_depth 
-            if Minimum_number_of_samples_internal_node <= 0:
-                Minimum_number_of_samples_internal_node = 2
-                print 'Minimum_number_of_samples_internal_node: ',Minimum_number_of_samples_internal_node
-            else:
-                Minimum_number_of_samples_internal_node = int(Minimum_number_of_samples_internal_node)
-                
-            if Minimum_number_of_samples_leaf_node <=0:
-               Minimum_number_of_samples_leaf_node = 1
-            else:
-                Minimum_number_of_samples_leaf_node = int(Minimum_number_of_samples_leaf_node)
-                print 'Minimum_number_of_samples_leaf_node: ',Minimum_number_of_samples_leaf_node
 except:
             raise GeoAlgorithmExecutionException("Error parameters CART - use integer number")
 #Create class
@@ -167,7 +158,7 @@ func.createDatas()
 #Create func to classifier decision tree
 progress.setText("Create model CART")
 progress.setPercentage(75)
-func.classifierTree(Maximum_depth,Minimum_number_of_samples_internal_node,Minimum_number_of_samples_leaf_node)
+func.classifierTree(Maximum_depth)
 #Add classification in write
 progress.setText("Write classification")
 func.writeClassification()
