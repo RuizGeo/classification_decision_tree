@@ -1,4 +1,4 @@
-classification_decision_tree.py
+classification from Classification And Regression Tree (CART)
 ===============================
 Classification by decision tree (CART) for use in processing framework QGIS
 
